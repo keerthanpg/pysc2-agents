@@ -31,7 +31,7 @@ flags.DEFINE_string("snapshot_path", "./snapshot/", "Path for snapshot.")
 flags.DEFINE_string("log_path", "./log/", "Path for log.")
 flags.DEFINE_string("device", "0", "Device for training.")
 
-flags.DEFINE_string("map", "MoveToBeacon", "Name of a map to use.")
+flags.DEFINE_string("map", "BuildMarines", "Name of a map to use.")
 flags.DEFINE_bool("render", True, "Whether to render with pygame.")
 flags.DEFINE_integer("screen_resolution", 64, "Resolution for screen feature layers.")
 flags.DEFINE_integer("minimap_resolution", 64, "Resolution for minimap feature layers.")
@@ -46,7 +46,7 @@ flags.DEFINE_integer("max_agent_steps", 60, "Total agent steps.")
 
 flags.DEFINE_bool("profile", False, "Whether to turn on code profiling.")
 flags.DEFINE_bool("trace", False, "Whether to trace the code execution.")
-flags.DEFINE_integer("parallel", 16, "How many instances to run in parallel.")
+flags.DEFINE_integer("parallel", 4, "How many instances to run in parallel.")
 flags.DEFINE_bool("save_replay", False, "Whether to save a replay at the end.")
 
 FLAGS(sys.argv)
@@ -98,6 +98,13 @@ def run_thread(agent, map_name, visualize):
             agent.save_model(SNAPSHOT, counter)
           if counter >= FLAGS.max_steps:
             break
+          if counter%5==0:
+            obs = recorder[-1].observation
+            score = obs["score_cumulative"][0]
+            f=open('scorelog', 'a')
+            f.write(str(counter)+ ' ' + str(score)+ '\n')
+            f.close()
+
       elif is_done:
         obs = recorder[-1].observation
         score = obs["score_cumulative"][0]
