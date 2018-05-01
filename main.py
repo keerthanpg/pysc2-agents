@@ -53,7 +53,8 @@ FLAGS(sys.argv)
 if FLAGS.training:
   PARALLEL = FLAGS.parallel
   MAX_AGENT_STEPS = FLAGS.max_agent_steps
-  DEVICE = ['/gpu:'+dev for dev in FLAGS.device.split(',')]
+  # DEVICE = ['/gpu:'+dev for dev in FLAGS.device.split(',')]
+  DEVICE = ['/cpu:0']
 else:
   PARALLEL = 1
   MAX_AGENT_STEPS = 1e5

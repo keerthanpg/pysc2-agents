@@ -18,22 +18,22 @@ def build_net(minimap, screen, info, msize, ssize, num_action, ntype):
 def build_atari(minimap, screen, info, msize, ssize, num_action):
   # Extract features
   mconv1 = layers.conv2d(tf.transpose(minimap, [0, 2, 3, 1]),
-                         num_outputs=16,
+                         num_outputs=32,
                          kernel_size=8,
                          stride=4,
                          scope='mconv1')
   mconv2 = layers.conv2d(mconv1,
-                         num_outputs=32,
+                         num_outputs=48,
                          kernel_size=4,
                          stride=2,
                          scope='mconv2')
   sconv1 = layers.conv2d(tf.transpose(screen, [0, 2, 3, 1]),
-                         num_outputs=16,
+                         num_outputs=32,
                          kernel_size=8,
                          stride=4,
                          scope='sconv1')
   sconv2 = layers.conv2d(sconv1,
-                         num_outputs=32,
+                         num_outputs=48,
                          kernel_size=4,
                          stride=2,
                          scope='sconv2')

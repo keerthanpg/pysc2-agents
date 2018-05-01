@@ -55,6 +55,9 @@ class A3CAgent(object):
       net = build_net(self.minimap, self.screen, self.info, self.msize, self.ssize, len(actions.FUNCTIONS), ntype)
       self.spatial_action, self.non_spatial_action, self.value = net
 
+      var = [v for v in tf.trainable_variables() if v.name == "sconv1/weights:0"]
+      print(var)
+
       # Set targets and masks
       self.valid_spatial_action = tf.placeholder(tf.float32, [None], name='valid_spatial_action')
       self.spatial_action_selected = tf.placeholder(tf.float32, [None, self.ssize**2], name='spatial_action_selected')
