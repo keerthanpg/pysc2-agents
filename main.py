@@ -99,6 +99,12 @@ def run_thread(agent, map_name, visualize):
             agent.save_model(SNAPSHOT, counter)
           if counter >= FLAGS.max_steps:
             break
+          if counter % 5 == 0:
+            obs = recorder[-1].observation
+            score = obs["score_cumulative"][0]
+            f = open('scorelog', 'a')
+            f.write(str(counter) + ' ' + str(score) + '\n')
+            f.close()
       elif is_done:
         obs = recorder[-1].observation
         score = obs["score_cumulative"][0]

@@ -78,32 +78,42 @@ def build_atari(minimap, screen, info, msize, ssize, num_action):
 def build_fcn(minimap, screen, info, msize, ssize, num_action):
   # Extract features
   mconv1 = layers.conv2d(tf.transpose(minimap, [0, 2, 3, 1]),
-                         num_outputs=16,
+                         num_outputs=32,
                          kernel_size=5,
                          stride=1,
                          scope='mconv1')
   mconv2 = layers.conv2d(mconv1,
-                         num_outputs=32,
+                         num_outputs=48,
                          kernel_size=3,
                          stride=1,
                          scope='mconv2')
-  sconv1 = layers.conv2d(tf.transpose(screen, [0, 2, 3, 1]),
+  mconv3 = layers.conv2d(mconv2,
                          num_outputs=16,
+                         kernel_size=3,
+                         stride=1,
+                         scope='mconv3')
+  sconv1 = layers.conv2d(tf.transpose(screen, [0, 2, 3, 1]),
+                         num_outputs=32,
                          kernel_size=5,
                          stride=1,
                          scope='sconv1')
   sconv2 = layers.conv2d(sconv1,
-                         num_outputs=32,
+                         num_outputs=48,
                          kernel_size=3,
                          stride=1,
                          scope='sconv2')
+  sconv3 = layers.conv2d(sconv2,
+                         num_outputs=16,
+                         kernel_size=3,
+                         stride=1,
+                         scope='sconv3')
   info_fc = layers.fully_connected(layers.flatten(info),
                                    num_outputs=256,
                                    activation_fn=tf.tanh,
                                    scope='info_fc')
 
   # Compute spatial actions
-  feat_conv = tf.concat([mconv2, sconv2], axis=3)
+  feat_conv = tf.concat([mconv3, sconv3], axis=3)
   spatial_action = layers.conv2d(feat_conv,
                                  num_outputs=1,
                                  kernel_size=1,
