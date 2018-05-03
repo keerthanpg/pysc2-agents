@@ -110,7 +110,14 @@ def build_fcn(minimap, screen, info, msize, ssize, num_action):
                                  stride=1,
                                  activation_fn=None,
                                  scope='spatial_action')
-  spatial_action = tf.nn.softmax(layers.flatten(spatial_action))
+
+  spatial1 = layers.fully_connected(layers.flatten(spatial_action),
+                                   num_outputs=int(layers.flatten(spatial_action).get_shape()[1]),
+                                   activation_fn=tf.nn.relu,
+                                   scope='spatial1')
+
+  spatial_action = tf.nn.softmax(spatial1)
+
 
   # Compute non spatial actions and value
   feat_fc = tf.concat([layers.flatten(mconv2), layers.flatten(sconv2), info_fc], axis=1)
@@ -118,11 +125,19 @@ def build_fcn(minimap, screen, info, msize, ssize, num_action):
                                    num_outputs=256,
                                    activation_fn=tf.nn.relu,
                                    scope='feat_fc')
-  non_spatial_action = layers.fully_connected(feat_fc,
+  non_spatial1 = layers.fully_connected(feat_fc,
+                                   num_outputs=num_action,
+                                   activation_fn=tf.nn.relu,
+                                   scope='non_spatial1')
+  non_spatial_action = layers.fully_connected(non_spatial1,
                                               num_outputs=num_action,
                                               activation_fn=tf.nn.softmax,
                                               scope='non_spatial_action')
-  value = tf.reshape(layers.fully_connected(feat_fc,
+  value1 = layers.fully_connected(feat_fc,
+                                            num_outputs=128,
+                                            activation_fn=None,
+                                            scope='value1')
+  value = tf.reshape(layers.fully_connected(value1,
                                             num_outputs=1,
                                             activation_fn=None,
                                             scope='value'), [-1])

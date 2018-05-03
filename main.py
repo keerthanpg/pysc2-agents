@@ -31,7 +31,7 @@ flags.DEFINE_string("snapshot_path", "./snapshot/", "Path for snapshot.")
 flags.DEFINE_string("log_path", "./log/", "Path for log.")
 flags.DEFINE_string("device", "0", "Device for training.")
 
-flags.DEFINE_string("map", "BuildMarines", "Name of a map to use.")
+flags.DEFINE_string("map", "FindAndDefeatZerglings", "Name of a map to use.")
 flags.DEFINE_bool("render", True, "Whether to render with pygame.")
 flags.DEFINE_integer("screen_resolution", 64, "Resolution for screen feature layers.")
 flags.DEFINE_integer("minimap_resolution", 64, "Resolution for minimap feature layers.")
